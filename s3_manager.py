@@ -45,7 +45,7 @@ class S3Manager:
     def __init__(self):
         """Initialize S3 client with credentials from .env"""
         if not AWSConfig.validate():
-            print("\n⚠️  Please configure your AWS credentials in the .env file.")
+            print("\nPlease configure your AWS credentials in the .env file.")
             print("   See README.md for setup instructions.")
             sys.exit(1)
 
@@ -68,7 +68,7 @@ class S3Manager:
         self.prefix = AWSConfig.DATA_PREFIX
         self.chunk_size = AWSConfig.UPLOAD_CHUNK_SIZE_MB * 1024 * 1024
 
-        print(f"🔐 AWS S3 client initialized")
+        print(f" AWS S3 client initialized")
         print(f"   Region: {AWSConfig.REGION}")
         print(f"   Bucket: {self.bucket_name}")
 
@@ -80,7 +80,7 @@ class S3Manager:
         """Create S3 bucket if it doesn't exist."""
         try:
             self.s3_client.head_bucket(Bucket=self.bucket_name)
-            print(f"✅ Bucket '{self.bucket_name}' already exists")
+            print(f" Bucket '{self.bucket_name}' already exists")
             return True
         except ClientError as e:
             error_code = int(e.response['Error']['Code'])
@@ -118,16 +118,16 @@ class S3Manager:
                         }
                     )
 
-                    print(f"✅ Bucket '{self.bucket_name}' created successfully")
+                    print(f" Bucket '{self.bucket_name}' created successfully")
                     return True
                 except ClientError as ce:
-                    print(f"❌ Failed to create bucket: {ce}")
+                    print(f" Failed to create bucket: {ce}")
                     return False
             elif error_code == 403:
-                print(f"❌ Access denied to bucket '{self.bucket_name}'")
+                print(f" Access denied to bucket '{self.bucket_name}'")
                 return False
             else:
-                print(f"❌ Error checking bucket: {e}")
+                print(f" Error checking bucket: {e}")
                 return False
 
     def configure_bucket_lifecycle(self):
@@ -165,9 +165,9 @@ class S3Manager:
                 Bucket=self.bucket_name,
                 LifecycleConfiguration=lifecycle_config
             )
-            print("✅ Lifecycle rules configured (IA after 30d, Glacier after 90d)")
+            print("Lifecycle rules configured (IA after 30d, Glacier after 90d)")
         except ClientError as e:
-            print(f"⚠️  Could not set lifecycle rules: {e}")
+            print(f" Could not set lifecycle rules: {e}")
 
     # --------------------------------------------------------
     # Upload Operations
@@ -187,7 +187,7 @@ class S3Manager:
         """
         file_path = Path(file_path)
         if not file_path.exists():
-            print(f"❌ File not found: {file_path}")
+            print(f" File not found: {file_path}")
             return False
 
         if s3_key is None:
@@ -211,7 +211,7 @@ class S3Manager:
                     total=file_size,
                     unit='B',
                     unit_scale=True,
-                    desc=f"   ⬆️  {file_path.name}",
+                    desc=f"     {file_path.name}",
                     bar_format='{l_bar}{bar:30}{r_bar}'
                 )
 
@@ -255,7 +255,7 @@ class S3Manager:
             return True
 
         except ClientError as e:
-            print(f"❌ Upload failed for {file_path.name}: {e}")
+            print(f" Upload failed for {file_path.name}: {e}")
             return False
 
     def upload_all_data(self):
@@ -263,22 +263,22 @@ class S3Manager:
         data_dir = DatasetConfig.DATA_DIR
 
         if not data_dir.exists():
-            print("❌ Data directory not found. Run data_generator.py first!")
+            print(" Data directory not found. Run data_generator.py first!")
             return False
 
         files = sorted(data_dir.glob('*.csv')) + sorted(data_dir.glob('*.json'))
 
         if not files:
-            print("❌ No data files found. Run data_generator.py first!")
+            print(" No data files found. Run data_generator.py first!")
             return False
 
         print(f"\n{'='*60}")
-        print(f"  ⬆️  UPLOADING DATA TO AWS S3")
+        print(f"  ⬆  UPLOADING DATA TO AWS S3")
         print(f"{'='*60}")
-        print(f"  📦 Bucket:  {self.bucket_name}")
-        print(f"  📁 Files:   {len(files)}")
+        print(f"   Bucket:  {self.bucket_name}")
+        print(f"   Files:   {len(files)}")
         total_size = sum(f.stat().st_size for f in files)
-        print(f"  💾 Total:   {total_size / (1024**3):.2f} GB")
+        print(f"   Total:   {total_size / (1024**3):.2f} GB")
         print(f"{'='*60}\n")
 
         # Create bucket if needed
@@ -302,12 +302,12 @@ class S3Manager:
         elapsed = time.time() - start_time
 
         print(f"\n{'='*60}")
-        print(f"  ✅ UPLOAD COMPLETE")
+        print(f"  UPLOAD COMPLETE")
         print(f"{'='*60}")
-        print(f"  ✅ Successful: {successful}")
-        print(f"  ❌ Failed:     {failed}")
-        print(f"  ⏱️  Time:      {elapsed:.1f} seconds")
-        print(f"  📊 Speed:     {total_size / elapsed / (1024**2):.1f} MB/s")
+        print(f"   Successful: {successful}")
+        print(f"   Failed:     {failed}")
+        print(f"    Time:      {elapsed:.1f} seconds")
+        print(f"   Speed:     {total_size / elapsed / (1024**2):.1f} MB/s")
         print(f"{'='*60}\n")
 
         # Upload a manifest file
@@ -339,7 +339,7 @@ class S3Manager:
 
         self.upload_file(manifest_path, f"{self.prefix}upload_manifest.json",
                          show_progress=False)
-        print("📋 Upload manifest saved and uploaded")
+        print(" Upload manifest saved and uploaded")
 
     # --------------------------------------------------------
     # Download Operations
@@ -364,7 +364,7 @@ class S3Manager:
                     total=file_size,
                     unit='B',
                     unit_scale=True,
-                    desc=f"   ⬇️  {os.path.basename(s3_key)}",
+                    desc=f"     {os.path.basename(s3_key)}",
                     bar_format='{l_bar}{bar:30}{r_bar}'
                 )
 
@@ -383,20 +383,20 @@ class S3Manager:
             return True
 
         except ClientError as e:
-            print(f"❌ Download failed: {e}")
+            print(f" Download failed: {e}")
             return False
 
     def download_all_data(self):
         """Download all data files from S3."""
         print(f"\n{'='*60}")
-        print(f"  ⬇️  DOWNLOADING DATA FROM AWS S3")
+        print(f"    DOWNLOADING DATA FROM AWS S3")
         print(f"{'='*60}\n")
 
         DatasetConfig.ensure_directories()
         objects = self.list_objects()
 
         if not objects:
-            print("❌ No objects found in bucket")
+            print(" No objects found in bucket")
             return False
 
         start_time = time.time()
@@ -408,7 +408,7 @@ class S3Manager:
                 successful += 1
 
         elapsed = time.time() - start_time
-        print(f"\n✅ Downloaded {successful}/{len(objects)} files "
+        print(f"\n Downloaded {successful}/{len(objects)} files "
               f"in {elapsed:.1f}s")
         return True
 
@@ -429,29 +429,29 @@ class S3Manager:
                 if 'Contents' in page:
                     objects.extend(page['Contents'])
         except ClientError as e:
-            print(f"❌ Error listing objects: {e}")
+            print(f" Error listing objects: {e}")
 
         return objects
 
     def show_bucket_status(self):
         """Display detailed bucket status."""
         print(f"\n{'='*60}")
-        print(f"  📊 S3 BUCKET STATUS")
+        print(f"   S3 BUCKET STATUS")
         print(f"{'='*60}")
 
         objects = self.list_objects()
         total_size = sum(obj['Size'] for obj in objects)
 
-        print(f"  🪣 Bucket:          {self.bucket_name}")
-        print(f"  🌎 Region:          {AWSConfig.REGION}")
-        print(f"  📁 Total objects:   {len(objects)}")
-        print(f"  💾 Total size:      {total_size / (1024**3):.2f} GB")
-        print(f"  📊 Avg object size: "
+        print(f"   Bucket:          {self.bucket_name}")
+        print(f"   Region:          {AWSConfig.REGION}")
+        print(f"   Total objects:   {len(objects)}")
+        print(f"   Total size:      {total_size / (1024**3):.2f} GB")
+        print(f"   Avg object size: "
               f"{total_size / len(objects) / (1024**2):.1f} MB"
-              if objects else "  📊 Avg object size: N/A")
+              if objects else "   Avg object size: N/A")
 
         if objects:
-            print(f"\n  📋 Objects:")
+            print(f"\n    Objects:")
             for obj in objects:
                 size_mb = obj['Size'] / (1024 * 1024)
                 last_mod = obj['LastModified'].strftime('%Y-%m-%d %H:%M')
@@ -477,7 +477,7 @@ class S3Manager:
                 )
                 urls[obj['Key']] = url
             except ClientError as e:
-                print(f"⚠️  Could not generate URL for {obj['Key']}: {e}")
+                print(f"  Could not generate URL for {obj['Key']}: {e}")
 
         return urls
 
@@ -487,7 +487,7 @@ class S3Manager:
 
     def cleanup_bucket(self):
         """Delete all objects from the bucket."""
-        print(f"\n⚠️  Cleaning up bucket: {self.bucket_name}")
+        print(f"\n  Cleaning up bucket: {self.bucket_name}")
 
         objects = self.list_objects()
         if not objects:
@@ -504,9 +504,9 @@ class S3Manager:
                 Bucket=self.bucket_name,
                 Delete={'Objects': batch}
             )
-            print(f"   🗑️  Deleted batch: {len(batch)} objects")
+            print(f"     Deleted batch: {len(batch)} objects")
 
-        print(f"✅ Deleted {len(objects)} objects from bucket")
+        print(f" Deleted {len(objects)} objects from bucket")
 
 
 # ============================================================
@@ -553,13 +553,13 @@ def main():
             print(f"   {key}:")
             print(f"   {url}\n")
     elif command == 'cleanup':
-        confirm = input("⚠️  This will DELETE all data. Type 'YES' to confirm: ")
+        confirm = input("  This will DELETE all data. Type 'YES' to confirm: ")
         if confirm == 'YES':
             manager.cleanup_bucket()
         else:
             print("Cancelled.")
     else:
-        print(f"❌ Unknown command: {command}")
+        print(f" Unknown command: {command}")
         print("   Run 'python s3_manager.py' for usage info")
 
 

@@ -525,5 +525,5 @@ for r in sorted_refs:
 
 # Save
 doc.save(str(OUT))
-print(f"\n✅ Report saved to: {OUT}")
+print(f"\n[OK] Report saved to: {OUT}")
 print(f"   Size: {os.path.getsize(OUT) / 1024:.0f} KB")

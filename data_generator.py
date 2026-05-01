@@ -89,7 +89,7 @@ class AirQualityDataGenerator:
                     self.stations.append(station)
                     station_id += 1
 
-        print(f"📡 Built registry of {len(self.stations)} monitoring stations "
+        print(f"[SATELLITE] Built registry of {len(self.stations)} monitoring stations "
               f"across {len(DatasetConfig.COUNTRIES_CITIES)} countries")
 
     def _build_temporal_patterns(self):
@@ -162,7 +162,7 @@ class AirQualityDataGenerator:
                  monthly_mult * hourly_mult * yearly_mult *
                  dow_mult * type_mult)
 
-        # Add Gaussian noise (±15%)
+        # Add Gaussian noise (+/- 15%)
         noise = np.random.normal(0, value * 0.15)
         value = max(base_min, value + noise)
         value = min(base_max, value)
@@ -406,10 +406,10 @@ class AirQualityDataGenerator:
     def generate(self):
         """Main generation loop - creates CSV files until target size is met."""
         print(f"\n{'='*60}")
-        print(f"  🌍 GLOBAL AIR QUALITY DATA GENERATOR")
-        print(f"  📦 Target size: {DatasetConfig.TARGET_SIZE_GB:.1f} GB")
-        print(f"  📡 Stations: {len(self.stations)}")
-        print(f"  📅 Period: {DatasetConfig.START_YEAR} - {DatasetConfig.END_YEAR}")
+        print(f"  [GLOBE] GLOBAL AIR QUALITY DATA GENERATOR")
+        print(f"  [PACKAGE] Target size: {DatasetConfig.TARGET_SIZE_GB:.1f} GB")
+        print(f"  [SATELLITE] Stations: {len(self.stations)}")
+        print(f"  [CALENDAR] Period: {DatasetConfig.START_YEAR} - {DatasetConfig.END_YEAR}")
         print(f"{'='*60}\n")
 
         headers = self._get_csv_header()
@@ -435,7 +435,7 @@ class AirQualityDataGenerator:
             total=self.target_size,
             unit='B',
             unit_scale=True,
-            desc='📝 Generating data',
+            desc='[CLIPBOARD] Generating data',
             bar_format='{l_bar}{bar:40}{r_bar}'
         )
 
@@ -459,7 +459,7 @@ class AirQualityDataGenerator:
                             'rows': current_file_rows,
                             'size_bytes': file_size
                         })
-                        print(f"\n   ✅ Completed: {os.path.basename(file_path)} "
+                        print(f"\n   [OK] Completed: {os.path.basename(file_path)} "
                               f"({current_file_rows:,} rows, "
                               f"{file_size / (1024*1024):.1f} MB)")
 
@@ -538,15 +538,15 @@ class AirQualityDataGenerator:
 
         # Print summary
         print(f"\n{'='*60}")
-        print(f"  ✅ DATA GENERATION COMPLETE")
+        print(f"  [OK] DATA GENERATION COMPLETE")
         print(f"{'='*60}")
-        print(f"  📊 Total records:     {self.total_rows:>15,}")
-        print(f"  📁 Total files:       {len(self.file_list):>15}")
+        print(f"  [CHART] Total records:     {self.total_rows:>15,}")
+        print(f"  [FOLDER] Total files:       {len(self.file_list):>15}")
         total_mb = self.total_bytes_written / (1024 * 1024)
         total_gb = total_mb / 1024
-        print(f"  💾 Total size:        {total_gb:>14.2f} GB")
-        print(f"  ⏱️  Generation time:   {elapsed:>14.1f} seconds")
-        print(f"  📂 Output directory:  {self.data_dir}")
+        print(f"  [DISK] Total size:        {total_gb:>14.2f} GB")
+        print(f"  [TIMER] Generation time:   {elapsed:>14.1f} seconds")
+        print(f"  [FOLDER] Output directory:  {self.data_dir}")
         print(f"{'='*60}\n")
 
         return self.file_list
@@ -583,26 +583,26 @@ class AirQualityDataGenerator:
         with open(metadata_path, 'w') as f:
             json.dump(metadata, f, indent=2, default=str)
 
-        print(f"   📋 Metadata saved to: {metadata_path}")
+        print(f"   [CLIPBOARD] Metadata saved to: {metadata_path}")
 
 
 def main():
     """Entry point for data generation."""
-    print("\n" + "🌍 " * 20)
+    print("\n" + "[GLOBE] " * 15)
     print("  GLOBAL AIR QUALITY DYNAMICS & INDUSTRIAL POLICY")
     print("  Dataset Generation Script v1.0")
-    print("🌍 " * 20 + "\n")
+    print("[GLOBE] " * 15 + "\n")
 
     generator = AirQualityDataGenerator()
     files = generator.generate()
 
-    print("📁 Generated files:")
+    print("[FOLDER] Generated files:")
     for f in files:
         size_mb = f['size_bytes'] / (1024 * 1024)
-        print(f"   • {f['file_name']}: {f['rows']:,} rows ({size_mb:.1f} MB)")
+        print(f"   * {f['file_name']}: {f['rows']:,} rows ({size_mb:.1f} MB)")
 
-    print("\n✅ Data generation complete!")
-    print("📌 Next step: Run 's3_manager.py' to upload data to AWS S3")
+    print("\n[OK] Data generation complete!")
+    print("[PUSHPIN] Next step: Run 's3_manager.py' to upload data to AWS S3")
     print("   Command: python s3_manager.py upload\n")
 
 

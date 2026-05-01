@@ -1,27 +1,27 @@
-"""
-============================================================
-Main Orchestrator - Global Air Quality Dynamics Project
-============================================================
-Runs the complete automated pipeline:
-  1. Generate 1.5GB+ synthetic dataset (or seed 50 records)
-  2. Upload to AWS S3
-  3. Download from S3 (demonstrates retrieval)
-  4. Spark distributed processing (MapReduce)
-  5. Store results in SQLite database
-  6. Run comprehensive analysis & visualizations
-  7. Hyperparameter tuning for AQI prediction models
 
-Usage:
-    python main.py              # Run full pipeline
-    python main.py generate     # Only generate data
-    python main.py seed         # Seed 50 sample records
-    python main.py upload       # Only upload to S3
-    python main.py spark        # Only run Spark processing
-    python main.py analyze      # Only run analysis
-    python main.py tune         # Only run model tuning
-    python main.py all          # Full pipeline
-============================================================
-"""
+# ============================================================
+# Main Orchestrator - Global Air Quality Dynamics Project
+# ============================================================
+# Runs the complete automated pipeline:
+#   1. Generate 1.5GB+ synthetic dataset (or seed 50 records)
+#   2. Upload to AWS S3
+#   3. Download from S3 (demonstrates retrieval)
+#   4. Spark distributed processing (MapReduce)
+#   5. Store results in SQLite database
+#   6. Run comprehensive analysis & visualizations
+#   7. Hyperparameter tuning for AQI prediction models
+
+# Usage:
+#     python main.py              # Run full pipeline
+#     python main.py generate     # Only generate data
+#     python main.py seed         # Seed 50 sample records
+#     python main.py upload       # Only upload to S3
+#     python main.py spark        # Only run Spark processing
+#     python main.py analyze      # Only run analysis
+#     python main.py tune         # Only run model tuning
+#     python main.py all          # Full pipeline
+# ============================================================
+
 
 import sys
 import time
@@ -32,25 +32,25 @@ from config import AWSConfig, DatasetConfig, ProjectInfo
 
 def print_banner():
     print(f"""
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   🌍  GLOBAL AIR QUALITY DYNAMICS & INDUSTRIAL POLICY  🌍   ║
-║                                                              ║
-║   Module: {ProjectInfo.MODULE_CODE:<20}                            ║
-║   Version: {ProjectInfo.VERSION:<19}                            ║
-║   Date: {datetime.now().strftime('%Y-%m-%d %H:%M'):<22}                            ║
-║                                                              ║
-║   Pipeline Stages:                                           ║
-║     1. 📊 Generate / Seed Air Quality Dataset               ║
-║     2. ☁️  Upload to Amazon AWS S3                            ║
-║     3. ⬇️  Download from S3 (verification)                    ║
-║     4. 🔥 Spark Distributed Processing (MapReduce)           ║
-║     5. 🗄️  Store Results in SQLite Database                   ║
-║     6. 🔬 Run Comprehensive Analysis                         ║
-║     7. 📈 Generate Visualizations & Reports                  ║
-║     8. ⚙️  Hyperparameter Tuning (ML Models)                  ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
++==============================================================+
+|                                                              |
+|     GLOBAL AIR QUALITY DYNAMICS & INDUSTRIAL POLICY       |
+|                                                              |
+|   Module: {ProjectInfo.MODULE_CODE:<20}                            |
+|   Version: {ProjectInfo.VERSION:<19}                            |
+|   Date: {datetime.now().strftime('%Y-%m-%d %H:%M'):<22}                            |
+|                                                              |
+|   Pipeline Stages:                                           |
+|     1.  Generate / Seed Air Quality Dataset               |
+|     2.  Upload to Amazon AWS S3                            |
+|     3.  Download from S3 (verification)                    |
+|     4.  Spark Distributed Processing (MapReduce)           |
+|     5.  Store Results in SQLite Database                   |
+|     6.  Run Comprehensive Analysis                         |
+|     7.  Generate Visualizations & Reports                  |
+|     8.  Hyperparameter Tuning (ML Models)                  |
+|                                                              |
++==============================================================+
     """)
 
 
@@ -79,7 +79,7 @@ def run_upload():
     print("  STAGE 2: AWS S3 UPLOAD")
     print("="*60)
     if not AWSConfig.validate():
-        print("⚠️  Skipping S3 upload - credentials not configured")
+        print("  Skipping S3 upload - credentials not configured")
         print("   Fill in your .env file and run: python s3_manager.py upload")
         return
     from s3_manager import S3Manager
@@ -93,7 +93,7 @@ def run_download():
     print("  STAGE 3: AWS S3 DOWNLOAD (Verification)")
     print("="*60)
     if not AWSConfig.validate():
-        print("⚠️  Skipping S3 download - credentials not configured")
+        print("  Skipping S3 download - credentials not configured")
         return
     from s3_manager import S3Manager
     manager = S3Manager()
@@ -165,7 +165,7 @@ def main():
 
     elapsed = time.time() - start
     print(f"\n{'='*60}")
-    print(f"  ✅ PIPELINE COMPLETE - Total time: {elapsed/60:.1f} minutes")
+    print(f"   PIPELINE COMPLETE - Total time: {elapsed/60:.1f} minutes")
     print(f"{'='*60}\n")
 
 

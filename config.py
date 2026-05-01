@@ -39,9 +39,9 @@ class AWSConfig:
         if not cls.BUCKET_NAME:
             errors.append("S3_BUCKET_NAME is not set in .env file")
         if errors:
-            print("\n❌ AWS Configuration Errors:")
+            print("\n[ERROR] AWS Configuration Errors:")
             for err in errors:
-                print(f"   • {err}")
+                print(f"   * {err}")
             print(f"\n   Please update your .env file at: {ENV_PATH}")
             return False
         return True
