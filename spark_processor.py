@@ -684,6 +684,6 @@ def main():
     processor = SparkProcessor()
     processor.run_full_processing()
 
-new
+
 if __name__ == '__main__':
     main()
