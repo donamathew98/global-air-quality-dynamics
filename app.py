@@ -339,7 +339,7 @@ def dashboard():
 
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print("  🌍 Global Air Quality Dynamics Dashboard")
-    print("  🔗 http://localhost:5000")
+    print("  [GLOBE] Global Air Quality Dynamics Dashboard")
+    print("  [LINK] http://localhost:5000")
     print("="*60 + "\n")
     app.run(host='0.0.0.0', port=5000, debug=False)

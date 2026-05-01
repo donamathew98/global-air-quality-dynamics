@@ -62,10 +62,10 @@ class AirQualityAnalyzer:
         csv_files = sorted(data_dir.glob('air_quality_part_*.csv'))
 
         if not csv_files:
-            print("❌ No data files found. Run data_generator.py first!")
+            print(" No data files found. Run data_generator.py first!")
             sys.exit(1)
 
-        print(f"📂 Found {len(csv_files)} data files")
+        print(f" Found {len(csv_files)} data files")
 
         # Read a sample from each file proportionally
         samples_per_file = max(1000, self.sample_size // len(csv_files))
@@ -83,22 +83,22 @@ class AirQualityAnalyzer:
                 )) if total > samples_per_file else []
                 chunk = pd.read_csv(f, skiprows=skip)
                 frames.append(chunk)
-                print(f"   ✅ {f.name}: {len(chunk):,} rows sampled from {total:,}")
+                print(f"    {f.name}: {len(chunk):,} rows sampled from {total:,}")
             except Exception as e:
-                print(f"   ⚠️  Error reading {f.name}: {e}")
+                print(f"     Error reading {f.name}: {e}")
 
         self.df = pd.concat(frames, ignore_index=True)
         self.df['timestamp'] = pd.to_datetime(self.df['timestamp'])
         self.df['date'] = pd.to_datetime(self.df['date'])
 
-        print(f"\n📊 Loaded {len(self.df):,} records for analysis")
+        print(f"\n Loaded {len(self.df):,} records for analysis")
         print(f"   Columns: {len(self.df.columns)}")
         print(f"   Memory: {self.df.memory_usage(deep=True).sum() / 1e6:.1f} MB")
         return self
 
     def descriptive_statistics(self):
         """Generate descriptive statistics."""
-        print("\n📈 Computing descriptive statistics...")
+        print("\n Computing descriptive statistics...")
         pollutants = ['PM2_5', 'PM10', 'NO2', 'SO2', 'CO', 'O3', 'VOC', 'Lead']
         stats_df = self.df[pollutants].describe().round(2)
         stats_df.to_csv(self.reports_dir / 'descriptive_statistics.csv')
@@ -128,7 +128,7 @@ class AirQualityAnalyzer:
         ax = axes[1, 0]
         self.df[['PM2_5', 'PM10', 'NO2', 'SO2']].plot(kind='box', ax=ax)
         ax.set_title('Pollutant Distributions', fontsize=14)
-        ax.set_ylabel('Concentration (µg/m³)')
+        ax.set_ylabel('Concentration (ug/m^3)')
 
         # Correlation heatmap
         ax = axes[1, 1]
@@ -141,11 +141,11 @@ class AirQualityAnalyzer:
         plt.savefig(self.charts_dir / '01_overview.png', dpi=150, bbox_inches='tight')
         plt.close()
         self.results['descriptive'] = stats_df.to_dict()
-        print("   ✅ Saved: 01_overview.png")
+        print("    Saved: 01_overview.png")
 
     def temporal_analysis(self):
         """Analyze temporal trends."""
-        print("\n📅 Performing temporal analysis...")
+        print("\n Performing temporal analysis...")
         fig, axes = plt.subplots(2, 2, figsize=(18, 12))
         fig.suptitle('Temporal Air Quality Trends', fontsize=18, fontweight='bold')
 
@@ -193,11 +193,11 @@ class AirQualityAnalyzer:
         plt.tight_layout()
         plt.savefig(self.charts_dir / '02_temporal.png', dpi=150, bbox_inches='tight')
         plt.close()
-        print("   ✅ Saved: 02_temporal.png")
+        print("    Saved: 02_temporal.png")
 
     def geographic_analysis(self):
         """Analyze geographic patterns."""
-        print("\n🌍 Performing geographic analysis...")
+        print("\n Performing geographic analysis...")
         fig, axes = plt.subplots(1, 2, figsize=(20, 8))
         fig.suptitle('Geographic Air Quality Comparison', fontsize=18, fontweight='bold')
 
@@ -221,11 +221,11 @@ class AirQualityAnalyzer:
         plt.tight_layout()
         plt.savefig(self.charts_dir / '03_geographic.png', dpi=150, bbox_inches='tight')
         plt.close()
-        print("   ✅ Saved: 03_geographic.png")
+        print("    Saved: 03_geographic.png")
 
     def industrial_impact_analysis(self):
         """Analyze industrial activity impact on air quality."""
-        print("\n🏭 Analyzing industrial impact...")
+        print("\n Analyzing industrial impact...")
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
         fig.suptitle('Industrial Activity & Air Quality', fontsize=18, fontweight='bold')
 
@@ -279,11 +279,11 @@ class AirQualityAnalyzer:
         plt.tight_layout()
         plt.savefig(self.charts_dir / '04_industrial.png', dpi=150, bbox_inches='tight')
         plt.close()
-        print("   ✅ Saved: 04_industrial.png")
+        print("    Saved: 04_industrial.png")
 
     def policy_effectiveness(self):
         """Evaluate environmental policy effectiveness."""
-        print("\n📜 Evaluating policy effectiveness...")
+        print("\n Evaluating policy effectiveness...")
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
         fig.suptitle('Policy Effectiveness Analysis', fontsize=18, fontweight='bold')
 
@@ -303,7 +303,7 @@ class AirQualityAnalyzer:
         emit_group.plot(kind='bar', ax=ax, color=COLORS[:3], edgecolor='white')
         ax.set_title('Emission Standards vs Pollutant Levels', fontsize=14)
         ax.set_xlabel('Emission Standard Level')
-        ax.set_ylabel('Concentration (µg/m³)')
+        ax.set_ylabel('Concentration (ug/m^3)')
         ax.legend(title='Pollutant')
 
         # Compliance rate distribution
@@ -328,11 +328,11 @@ class AirQualityAnalyzer:
         plt.tight_layout()
         plt.savefig(self.charts_dir / '05_policy.png', dpi=150, bbox_inches='tight')
         plt.close()
-        print("   ✅ Saved: 05_policy.png")
+        print("    Saved: 05_policy.png")
 
     def health_impact_analysis(self):
         """Analyze health impact of air pollution."""
-        print("\n🏥 Analyzing health impacts...")
+        print("\n Analyzing health impacts...")
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
         fig.suptitle('Health Impact Assessment', fontsize=18, fontweight='bold')
 
@@ -376,11 +376,11 @@ class AirQualityAnalyzer:
         plt.tight_layout()
         plt.savefig(self.charts_dir / '06_health.png', dpi=150, bbox_inches='tight')
         plt.close()
-        print("   ✅ Saved: 06_health.png")
+        print("    Saved: 06_health.png")
 
     def clustering_analysis(self):
         """Perform K-means clustering on city pollution profiles."""
-        print("\n🔬 Performing clustering analysis...")
+        print("\n Performing clustering analysis...")
         features = ['PM2_5', 'PM10', 'NO2', 'SO2', 'CO', 'O3',
                      'industrial_output_index', 'regulation_stringency_score',
                      'green_energy_pct']
@@ -416,11 +416,11 @@ class AirQualityAnalyzer:
         plt.close()
 
         city_profiles.to_csv(self.reports_dir / 'city_clusters.csv')
-        print("   ✅ Saved: 07_clustering.png, city_clusters.csv")
+        print("    Saved: 07_clustering.png, city_clusters.csv")
 
     def generate_summary_report(self):
         """Generate a text summary report."""
-        print("\n📝 Generating summary report...")
+        print("\n Generating summary report...")
         report = []
         report.append("=" * 70)
         report.append(f"  {ProjectInfo.TITLE}")
@@ -442,11 +442,11 @@ class AirQualityAnalyzer:
 
         r, _ = stats.pearsonr(self.df['industrial_output_index'].dropna(),
                               self.df['AQI'].loc[self.df['industrial_output_index'].dropna().index])
-        report.append(f"   Industrial output ↔ AQI correlation: {r:.3f}")
+        report.append(f"   Industrial output <-> AQI correlation: {r:.3f}")
 
         r2, _ = stats.pearsonr(self.df['regulation_stringency_score'].dropna(),
                                self.df['AQI'].loc[self.df['regulation_stringency_score'].dropna().index])
-        report.append(f"   Regulation score ↔ AQI correlation: {r2:.3f}")
+        report.append(f"   Regulation score <-> AQI correlation: {r2:.3f}")
 
         tax_mean = self.df.groupby('has_carbon_tax')['AQI'].mean()
         if len(tax_mean) == 2:
@@ -457,13 +457,13 @@ class AirQualityAnalyzer:
         report_path = self.reports_dir / 'analysis_summary.txt'
         with open(report_path, 'w') as f:
             f.write(report_text)
-        print(f"   ✅ Saved: {report_path}")
+        print(f"    Saved: {report_path}")
         print(report_text)
 
     def run_full_analysis(self):
         """Execute all analysis modules."""
         print(f"\n{'='*60}")
-        print(f"  🔬 COMPREHENSIVE AIR QUALITY ANALYSIS")
+        print(f"  COMPREHENSIVE AIR QUALITY ANALYSIS")
         print(f"{'='*60}\n")
 
         self.load_data()
@@ -477,9 +477,9 @@ class AirQualityAnalyzer:
         self.generate_summary_report()
 
         print(f"\n{'='*60}")
-        print(f"  ✅ ALL ANALYSES COMPLETE")
-        print(f"  📊 Charts: {self.charts_dir}")
-        print(f"  📋 Reports: {self.reports_dir}")
+        print(f"   ALL ANALYSES COMPLETE")
+        print(f"   Charts: {self.charts_dir}")
+        print(f"  Reports: {self.reports_dir}")
         print(f"{'='*60}\n")
 
 

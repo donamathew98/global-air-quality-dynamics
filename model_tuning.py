@@ -65,12 +65,12 @@ class AQIModelTuner:
 
     def load_and_prepare_data(self):
         """Load data and prepare features for ML."""
-        print("\n📂 Loading data for model tuning...")
+        print("\n[FOLDER] Loading data for model tuning...")
         data_dir = DatasetConfig.DATA_DIR
         csv_files = sorted(data_dir.glob('air_quality_part_*.csv'))
 
         if not csv_files:
-            print("❌ No data files found!")
+            print("[ERROR] No data files found!")
             sys.exit(1)
 
         # Sample data for tuning (use manageable size)
@@ -80,7 +80,7 @@ class AQIModelTuner:
             frames.append(chunk)
 
         df = pd.concat(frames, ignore_index=True)
-        print(f"   ✅ Loaded {len(df):,} records")
+        print(f"   [OK] Loaded {len(df):,} records")
 
         # Feature engineering
         feature_cols = [
@@ -112,12 +112,12 @@ class AQIModelTuner:
             self.X, self.y, test_size=0.2, random_state=42
         )
 
-        print(f"   📊 Features: {len(available)}")
-        print(f"   🔀 Train: {len(self.X_train):,} | Test: {len(self.X_test):,}")
+        print(f"   [CHART] Features: {len(available)}")
+        print(f"   [SPLIT] Train: {len(self.X_train):,} | Test: {len(self.X_test):,}")
 
     def tune_random_forest(self):
         """Tune Random Forest with GridSearchCV."""
-        print("\n🌲 Tuning Random Forest Regressor...")
+        print("\n[FOREST] Tuning Random Forest Regressor...")
         start = time.time()
 
         param_grid = {
@@ -154,14 +154,14 @@ class AQIModelTuner:
         self.rf_model = best
         self.rf_search = search
 
-        print(f"   ✅ Best R²: {metrics['test_r2']}")
-        print(f"   📊 RMSE: {metrics['test_rmse']} | MAE: {metrics['test_mae']}")
-        print(f"   ⚙️  Params: {metrics['best_params']}")
-        print(f"   ⏱️  Duration: {metrics['duration_s']}s")
+        print(f"   [OK] Best R²: {metrics['test_r2']}")
+        print(f"   [CHART] RMSE: {metrics['test_rmse']} | MAE: {metrics['test_mae']}")
+        print(f"   [GEAR] Params: {metrics['best_params']}")
+        print(f"   [TIMER] Duration: {metrics['duration_s']}s")
 
     def tune_gradient_boosting(self):
         """Tune Gradient Boosting with GridSearchCV."""
-        print("\n🚀 Tuning Gradient Boosting Regressor...")
+        print("\n[BOOST] Tuning Gradient Boosting Regressor...")
         start = time.time()
 
         param_grid = {
@@ -196,17 +196,17 @@ class AQIModelTuner:
         self.results['gradient_boosting'] = metrics
         self.gb_model = best
 
-        print(f"   ✅ Best R²: {metrics['test_r2']}")
-        print(f"   📊 RMSE: {metrics['test_rmse']} | MAE: {metrics['test_mae']}")
-        print(f"   ⚙️  Params: {metrics['best_params']}")
+        print(f"   [OK] Best R²: {metrics['test_r2']}")
+        print(f"   [CHART] RMSE: {metrics['test_rmse']} | MAE: {metrics['test_mae']}")
+        print(f"   [GEAR] Params: {metrics['best_params']}")
 
     def tune_xgboost(self):
         """Tune XGBoost with RandomizedSearchCV."""
         if not HAS_XGBOOST:
-            print("\n⚠️  XGBoost not installed, skipping...")
+            print("\n[WARNING] XGBoost not installed, skipping...")
             return
 
-        print("\n⚡ Tuning XGBoost Regressor...")
+        print("\n[LIGHTNING] Tuning XGBoost Regressor...")
         start = time.time()
 
         param_grid = {
@@ -244,13 +244,13 @@ class AQIModelTuner:
         self.results['xgboost'] = metrics
         self.xgb_model = best
 
-        print(f"   ✅ Best R²: {metrics['test_r2']}")
-        print(f"   📊 RMSE: {metrics['test_rmse']} | MAE: {metrics['test_mae']}")
-        print(f"   ⚙️  Params: {metrics['best_params']}")
+        print(f"   [OK] Best R²: {metrics['test_r2']}")
+        print(f"   [CHART] RMSE: {metrics['test_rmse']} | MAE: {metrics['test_mae']}")
+        print(f"   [GEAR] Params: {metrics['best_params']}")
 
     def generate_comparison_charts(self):
         """Generate model comparison visualizations."""
-        print("\n📊 Generating comparison charts...")
+        print("\n[CHART] Generating comparison charts...")
 
         fig, axes = plt.subplots(2, 2, figsize=(16, 12))
         fig.suptitle('Model Tuning Results - AQI Prediction',
@@ -304,11 +304,11 @@ class AQIModelTuner:
         plt.savefig(self.charts_dir / '08_model_tuning.png', dpi=150,
                     bbox_inches='tight')
         plt.close()
-        print("   ✅ Saved: 08_model_tuning.png")
+        print("   [OK] Saved: 08_model_tuning.png")
 
     def save_results_to_db(self):
         """Save tuning results to SQLite database."""
-        print("\n🗄️  Saving tuning results to database...")
+        print("\n[DATABASE] Saving tuning results to database...")
 
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
@@ -341,7 +341,7 @@ class AQIModelTuner:
 
         conn.commit()
         conn.close()
-        print("   ✅ Results saved to model_tuning_results table")
+        print("   [OK] Results saved to model_tuning_results table")
 
     def save_report(self):
         """Save text report of tuning results."""
@@ -371,7 +371,7 @@ class AQIModelTuner:
                 best_model = r['model']
 
         report.append(f"\n{'='*60}")
-        report.append(f"  🏆 BEST MODEL: {best_model} (R² = {best_r2})")
+        report.append(f"  [TROPHY] BEST MODEL: {best_model} (R² = {best_r2})")
         report.append(f"{'='*60}")
 
         report_text = '\n'.join(report)
@@ -380,13 +380,13 @@ class AQIModelTuner:
             f.write(report_text)
 
         print(report_text)
-        print(f"\n   ✅ Saved: {path}")
+        print(f"\n   [OK] Saved: {path}")
 
     def run_full_tuning(self):
         """Execute complete model tuning pipeline."""
         print(f"\n{'='*60}")
-        print(f"  ⚙️  HYPERPARAMETER TUNING PIPELINE")
-        print(f"  🌍 {ProjectInfo.TITLE}")
+        print(f"  [GEAR] HYPERPARAMETER TUNING PIPELINE")
+        print(f"  [GLOBE] {ProjectInfo.TITLE}")
         print(f"{'='*60}")
 
         start = time.time()
@@ -400,7 +400,7 @@ class AQIModelTuner:
         self.save_report()
 
         elapsed = time.time() - start
-        print(f"\n  ✅ TUNING COMPLETE - Total: {elapsed:.1f}s")
+        print(f"\n  [OK] TUNING COMPLETE - Total: {elapsed:.1f}s")
 
 
 def main():

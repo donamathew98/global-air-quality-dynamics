@@ -339,7 +339,7 @@ class SparkProcessor:
         conn.close()
         elapsed = time.time() - start
 
-        print(f"    Aggregated {len(rows)} countries → country_aqi_stats table")
+        print(f"    Aggregated {len(rows)} countries -> country_aqi_stats table")
         print(f"    Duration: {elapsed:.1f}s")
 
         self._log_processing('country_aggregation', len(rows), elapsed,
@@ -383,7 +383,7 @@ class SparkProcessor:
         conn.close()
         elapsed = time.time() - start
 
-        print(f"    Aggregated {len(rows)} cities → city_aqi_stats table")
+        print(f"    Aggregated {len(rows)} cities -> city_aqi_stats table")
         print(f"    Duration: {elapsed:.1f}s")
 
         self._log_processing('city_aggregation', len(rows), elapsed,
@@ -424,7 +424,7 @@ class SparkProcessor:
         conn.close()
         elapsed = time.time() - start
 
-        print(f"    Analyzed {len(rows)} year-country combinations → yearly_trends table")
+        print(f"    Analyzed {len(rows)} year-country combinations -> yearly_trends table")
         print(f"    Duration: {elapsed:.1f}s")
 
         self._log_processing('yearly_trends', len(rows), elapsed,
@@ -466,7 +466,7 @@ class SparkProcessor:
         conn.close()
         elapsed = time.time() - start
 
-        print(f"    Analyzed {len(rows)} sectors → sector_impact table")
+        print(f"    Analyzed {len(rows)} sectors -> sector_impact table")
         print(f"    Duration: {elapsed:.1f}s")
 
         self._log_processing('sector_impact', len(rows), elapsed,
@@ -506,7 +506,7 @@ class SparkProcessor:
         conn.close()
         elapsed = time.time() - start
 
-        print(f"    Analyzed {len(rows)} policy groups → policy_effectiveness table")
+        print(f"    Analyzed {len(rows)} policy groups -> policy_effectiveness table")
         print(f"    Duration: {elapsed:.1f}s")
 
         self._log_processing('policy_analysis', len(rows), elapsed,
@@ -549,7 +549,7 @@ class SparkProcessor:
         conn.close()
         elapsed = time.time() - start
 
-        print(f"    Analyzed {len(rows)} hourly slots → hourly_patterns table")
+        print(f"    Analyzed {len(rows)} hourly slots -> hourly_patterns table")
         print(f"    Duration: {elapsed:.1f}s")
 
         self._log_processing('hourly_patterns', len(rows), elapsed,
@@ -589,7 +589,7 @@ class SparkProcessor:
         conn.close()
         elapsed = time.time() - start
 
-        print(f"    Analyzed {len(rows)} AQI brackets → health_correlations table")
+        print(f"    Analyzed {len(rows)} AQI brackets -> health_correlations table")
         print(f"    Duration: {elapsed:.1f}s")
 
         self._log_processing('health_correlations', len(rows), elapsed,
